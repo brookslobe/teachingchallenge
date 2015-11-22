@@ -1,20 +1,16 @@
 // starting code for learning three.js - a JavaScript 3D framework built on top of WebGL
 
-
-
 var scene, camera, renderer;
 
 var geometry, material, torus;
 
-
-var controls;
+var controls; // camera controls
 
 // prepare page
 init();
 
+// render loop. this will draw the scene 60 times per second
 render();
-
-
 
 function init() {
 
@@ -23,73 +19,79 @@ function init() {
 
 	scene = new THREE.Scene(); 
 
-	// parameters: field of view, aspect ratio, near plane, far plane)
+	// attributes: field of view, aspect ratio, near plane, far plane)
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 ); 
-	camera.position.z = 15;
+	camera.position.z = 25;
 
 	renderer = new THREE.WebGLRenderer(); 
 
 	renderer.setSize( window.innerWidth, window.innerHeight ); 
 
 	// set background color of scene
-	renderer.setClearColor('green');
+	renderer.setClearColor('skyblue');
 
 	// append renderer to DOM
 	document.body.appendChild( renderer.domElement );
 
-
-
 	// adding the shape
-
-	// parameters for torus: radius, diameter of tube, radial segments, tubular segments
+	// attributes for torus: radius, diameter of tube, radial segments, tubular segments, arc (Math.PI * 2 = default)
 	geometry = new THREE.TorusGeometry( 5, 2, 10, 30); 
 
 	// MeshBasicMaterial makes it look flat
 	// also MeshLambertMaterial, MeshPhongMaterial, 
 	material = new THREE.MeshPhongMaterial({
-		color: 'skyblue',
+		color: 'green',
 		shininess: 10
 	}); 
 
-
-
 	// adding a mesh (object that applies a material to it)
 	torus = new THREE.Mesh( geometry, material );
-
+	torus.position.x = 20;
+	torus.position.y = 25;
 	scene.add( torus ); 
 
+	var torus2 = new THREE.Mesh( geometry, material );
+	torus2.position.x = -20;
+	torus2.position.y = 25;
+	scene.add( torus2 );
 
+	// attributes: width, height, depth
+	geometry = new THREE.BoxGeometry(15, 15, 3);
+	material = new THREE.MeshPhongMaterial({
+		color: 'purple'
+	})
+	nose = new THREE.Mesh( geometry, material );
+	scene.add( nose );
 
-	// AFTER BASIC TUTORIAL
+	// attributes: width, height, depth
+	geometry = new THREE.TorusGeometry(25, 2, 10, 30, Math.PI)
+	material = new THREE.MeshPhongMaterial({
+		color: 'red',
+		shininess: 5
+	})
+	mouth = new THREE.Mesh( geometry, material );
+	mouth.position.y = -5;
+	mouth.rotation.z = Math.PI;
+	scene.add( mouth );
 
 	// add camera control ( add script file, update controls in render function )
 	controls = new THREE.OrbitControls( camera, renderer.domElement );
-
 
 	// adding light, set its position
 	var light = new THREE.PointLight( 0xffffff );
 	light.position.set(-100, 200, 100);
 	scene.add(light);
-
-	// must change MeshBasicMatieral to MeshLambertMaterial or MeshPhongMaterial to see the light
-
+	// note: must change MeshBasicMaterial to MeshLambertMaterial or MeshPhongMaterial to see the lighting
 
 
 	material = new THREE.MeshPhongMaterial({
 		color: 'white'
 	});
 	var plane = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), material);
-
 	plane.material.side =  THREE.DoubleSide;
 	plane.position.z = -2;
-
 	scene.add(plane);
-
-
 }
-
-
-
 
 // render loop. this will draw the scene 60 times per second
 
@@ -99,13 +101,9 @@ function render() {
 	// add this for controlling the camera;
 	controls.update();
 
-	// animating the cube
-
+	// rotate the torus
 	//torus.rotation.x += 0.01;
-
 	//torus.rotation.y += 0.01;
-
-
 
 	renderer.render( scene, camera ); 
 } 
