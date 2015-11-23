@@ -9,7 +9,7 @@ var controls; // camera controls
 // prepare page
 init();
 
-// render loop. this will draw the scene 60 times per second
+// render loop. this will draw/display the scene 60 times per second
 render();
 
 function init() {
